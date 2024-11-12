@@ -4,9 +4,12 @@ import { upload } from "./config/configMulter.js";
 import { v2 as cloudinary } from 'cloudinary';
 import fs from 'fs';
 
+
 import { cloud_Name} from './config/configServer.js';
 import { api_Key } from './config/configServer.js';
 import { api_Secret } from './config/configServer.js';
+import connectDB from "./config/configMongodbAtlas.js";
+import Image from "./Schema/userSchema.js";
     
 cloudinary.config({ 
     cloud_name: cloud_Name, 
@@ -18,28 +21,16 @@ cloudinary.config({
 
 const app=express();
 
-// app.post('/post',upload.single('myfile'),async (req, res)=>{
-        
- 
-//     const x =await cloudinary.uploader.upload(req.file.path)
-//     console.log('file upload sucessfully to Coudinary : ', x );
 
-//         // Remove the file
-//     // fs.unlink((req.file.path),
-//     // function(err){ 
-//     // if (err) console.log(err); 
-//     // else console.log("\nDeleted file");
-//     // }) ;
-
-//     res.send('Hello World!')
-     
-// })
 app.post('/post',upload.single('myfile'),async (req,res)=>{
     console.log(req.file.path)
 
     try {
         const x= await cloudinary.uploader.upload(req.file.path)
         console.log("cloudianry",x)
+
+        const db= new Image({Image_Url:x.secure_url});
+        db.save().then(()=>{console.log('image url successfully uploaded to database')})
 
         //const newvar = new Image({Image_Url:x.secure_url});
         //newvar.save().then(() => console.log('kaam ho gaya'));
@@ -54,7 +45,7 @@ app.post('/post',upload.single('myfile'),async (req,res)=>{
 
         res.json({
             msg:"file uploaded",
-            your_url:{image_url:x.secure_url}
+            your_url:{Image_Url:x.secure_url}
         })
     
     } catch (error) 
@@ -68,5 +59,6 @@ app.post('/post',upload.single('myfile'),async (req,res)=>{
 
 app.listen(port,()=>{
     console.log("server is running on " , port);
+    connectDB();
     
 })

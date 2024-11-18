@@ -1,21 +1,13 @@
 import express from "express"
 import { port } from "./config/configServer.js";
 import { upload } from "./config/configMulter.js";
-import { v2 as cloudinary } from 'cloudinary';
+//import { v2 as cloudinary } from 'cloudinary';
 import fs from 'fs';
-
-
-import { cloud_Name} from './config/configServer.js';
-import { api_Key } from './config/configServer.js';
-import { api_Secret } from './config/configServer.js';
+import cloudinary from "./config/configCloudinary.js";
 import connectDB from "./config/configMongodbAtlas.js";
 import Image from "./Schema/userSchema.js";
     
-cloudinary.config({ 
-    cloud_name: cloud_Name, 
-    api_key: api_Key, 
-    api_secret: api_Secret
-});
+
 
 
 

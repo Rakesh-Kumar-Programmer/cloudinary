@@ -2,7 +2,7 @@ import multer from "multer"
 import { v4 as uuidv4 } from 'uuid';
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, 'upload/')
+      cb(null, './src/upload/')
     },
     filename: function (req, file, cb) {
       console.log("Inside file name Function", file);
@@ -11,4 +11,6 @@ const storage = multer.diskStorage({
     }
   })
   
- export const upload = multer({ storage: storage })
+ export const upload = multer({
+   storage: storage 
+  })
